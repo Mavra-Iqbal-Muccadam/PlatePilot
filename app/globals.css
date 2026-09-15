@@ -1,0 +1,24 @@
+@import "tailwindcss";
+
+:root {
+  --background: #F8FAF4;
+  --foreground: #386641;
+  --font-inter: var(--font-bricolage-grotesque);
+  --default-font-family: var(--font-bricolage-grotesque);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-bricolage-grotesque);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-bricolage-grotesque), sans-serif;
+}
+
+* {
+  scroll-behavior: smooth;
+}
