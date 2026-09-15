@@ -46,6 +46,10 @@ export async function GET(request: NextRequest) {
       const savings = originalPrice - dealPrice;
       const savingsPercentage = originalPrice > 0 ? Math.round((savings / originalPrice) * 100) : 0;
 
+      const restaurantUser = Array.isArray(deal.restaurant_user)
+        ? deal.restaurant_user[0]
+        : deal.restaurant_user as { id: any; name: any; profile_pic: any };
+
       return {
         id: deal.id,
         deal_name: deal.deal_name,
@@ -55,9 +59,9 @@ export async function GET(request: NextRequest) {
         current_uses: deal.current_uses || 0,
         created_at: deal.created_at,
         restaurant: {
-          id: deal.restaurant_user.id,
-          name: deal.restaurant_user.name,
-          profile_pic: deal.restaurant_user.profile_pic
+          id: restaurantUser?.id,
+          name: restaurantUser?.name,
+          profile_pic: restaurantUser?.profile_pic
         },
         items: deal.deal_items.map((item: any) => ({
           food_name: item.food.name,
