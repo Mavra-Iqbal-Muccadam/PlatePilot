@@ -28,7 +28,12 @@ export class GenerateSustainableDishCommand {
     error?: string;
   }> {
     try {
-      const result = await this.strategy.generateSustainableDish(this.ingredients);
+      const mappedIngredients = this.ingredients.map(ing => ({
+        ingredient_name: ing.name,
+        calories_count: ing.calories,
+        count: ing.count
+      }));
+      const result = await this.strategy.generateSustainableDish(mappedIngredients);
       return {
         success: true,
         dish: {
