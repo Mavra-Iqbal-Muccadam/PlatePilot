@@ -40,37 +40,39 @@ export async function GET(request: NextRequest) {
     }
 
     // Transform the data to include restaurant info and calculate savings
-    const transformedDeals = deals?.map(deal => {
-      const originalPrice = parseFloat(deal.original_price.toString());
-      const dealPrice = parseFloat(deal.deal_price.toString());
-      const savings = originalPrice - dealPrice;
-      const savingsPercentage = originalPrice > 0 ? Math.round((savings / originalPrice) * 100) : 0;
+const transformedDeals = deals?.map(deal => {
+  const originalPrice = parseFloat(deal.original_price.toString());
+  const dealPrice = parseFloat(deal.deal_price.toString());
+  const savings = originalPrice - dealPrice;
+  const savingsPercentage = originalPrice > 0 ? Math.round((savings / originalPrice) * 100) : 0;
 
-      const restaurantUser = Array.isArray(deal.restaurant_user)
-        ? deal.restaurant_user[0]
-        : deal.restaurant_user as { id: any; name: any; profile_pic: any };
+  type RestaurantUser = { id: any; name: any; profile_pic: any } | null;
 
-      return {
-        id: deal.id,
-        deal_name: deal.deal_name,
-        description: deal.description || '',
-        original_price: originalPrice,
-        deal_price: dealPrice,
-        current_uses: deal.current_uses || 0,
-        created_at: deal.created_at,
-        restaurant: {
-          id: restaurantUser?.id,
-          name: restaurantUser?.name,
-          profile_pic: restaurantUser?.profile_pic
-        },
-        items: deal.deal_items.map((item: any) => ({
-          food_name: item.food.name,
-          quantity: item.quantity
-        })),
-        savings: Math.max(0, savings),
-        savingsPercentage: Math.max(0, savingsPercentage)
-      };
-    }) || [];
+  const restaurantUser: RestaurantUser = Array.isArray(deal.restaurant_user)
+    ? (deal.restaurant_user[0] ?? null)
+    : (deal.restaurant_user as RestaurantUser);
+
+  return {
+    id: deal.id,
+    deal_name: deal.deal_name,
+    description: deal.description || '',
+    original_price: originalPrice,
+    deal_price: dealPrice,
+    current_uses: deal.current_uses || 0,
+    created_at: deal.created_at,
+    restaurant: {
+      id: restaurantUser?.id,
+      name: restaurantUser?.name,
+      profile_pic: restaurantUser?.profile_pic
+    },
+    items: deal.deal_items.map((item: any) => ({
+      food_name: item.food.name,
+      quantity: item.quantity
+    })),
+    savings: Math.max(0, savings),
+    savingsPercentage: Math.max(0, savingsPercentage)
+  };
+}) || [];
 
     return NextResponse.json({
       success: true,
