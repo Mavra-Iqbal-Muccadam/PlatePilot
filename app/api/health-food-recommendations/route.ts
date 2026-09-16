@@ -301,21 +301,26 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       healthAnalysis,
-      recommendedFoods: recommendedFoods.map(food => ({
-        id: food.id,
-        name: food.name,
-        description: food.description,
-        price: parseFloat(food.price.toString()),
-        image_url: food.image_url,
-        total_calories: food.total_calories,
-        protein_content: food.protein_content,
-        restaurant: {
-          id: food.restaurant_user?.id,
-          name: food.restaurant_user?.name,
-          profile_pic: food.restaurant_user?.profile_pic
-        },
-        suitability_score: Math.floor(Math.random() * 30) + 70 // Simulated suitability score
-      })),
+      recommendedFoods: recommendedFoods.map(food => {
+        const ru = Array.isArray(food.restaurant_user)
+          ? food.restaurant_user[0] as { id: any; name: any; profile_pic: any } | undefined
+          : food.restaurant_user as { id: any; name: any; profile_pic: any } | null;
+        return {
+          id: food.id,
+          name: food.name,
+          description: food.description,
+          price: parseFloat(food.price.toString()),
+          image_url: food.image_url,
+          total_calories: food.total_calories,
+          protein_content: food.protein_content,
+          restaurant: {
+            id: ru?.id,
+            name: ru?.name,
+            profile_pic: ru?.profile_pic
+          },
+          suitability_score: Math.floor(Math.random() * 30) + 70 // Simulated suitability score
+        };
+      }),
       aiRecommendations,
       userProfile: {
         ...userProfile,

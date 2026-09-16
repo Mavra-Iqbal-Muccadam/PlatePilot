@@ -33,7 +33,7 @@ export class JWTAuthStrategy implements AuthStrategy {
 
   generateToken(payload: AuthPayload): string {
     try {
-      return jwt.sign(payload, this.secret, { expiresIn: this.expiresIn });
+      return jwt.sign(payload, this.secret, { expiresIn: this.expiresIn as any });
     } catch (error) {
       console.error('Error generating JWT token:', error);
       throw new Error('Failed to generate authentication token');

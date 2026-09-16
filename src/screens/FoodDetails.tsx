@@ -302,7 +302,7 @@ export default function FoodDetailsPage() {
   };
 
   const addToCartOnly = (item: FoodItem) => {
-    const cartBridge = window as Window &
+    const cartBridge = window as unknown as Window &
       Record<string, AddToCartFn | undefined>;
     const addToCartFunction = cartBridge[`addToCart_${restaurantId}`];
     if (!addToCartFunction) {

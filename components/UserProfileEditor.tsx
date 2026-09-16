@@ -48,8 +48,8 @@ export default function UserProfileEditor({
   const [selectedProfession, setSelectedProfession] = useState<string>(
     PROFESSION_OPTIONS.includes(initialProfession || '') ? initialProfession || '' : 'Other'
   );
-  const [showOtherInput, setShowOtherInput] = useState(
-    !PROFESSION_OPTIONS.includes(initialProfession || '') && initialProfession
+  const [showOtherInput, setShowOtherInput] = useState<boolean>(
+    Boolean(!PROFESSION_OPTIONS.includes(initialProfession || '') && initialProfession)
   );
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
@@ -61,7 +61,7 @@ export default function UserProfileEditor({
     setSelectedProfession(
       PROFESSION_OPTIONS.includes(initialProfession || '') ? initialProfession || '' : 'Other'
     );
-    setShowOtherInput(!PROFESSION_OPTIONS.includes(initialProfession || '') && initialProfession);
+    setShowOtherInput(Boolean(!PROFESSION_OPTIONS.includes(initialProfession || '') && initialProfession));
   }, [initialAge, initialWeight, initialProfession]);
 
   const handleProfessionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -134,7 +134,7 @@ export default function UserProfileEditor({
     setSelectedProfession(
       PROFESSION_OPTIONS.includes(initialProfession || '') ? initialProfession || '' : 'Other'
     );
-    setShowOtherInput(!PROFESSION_OPTIONS.includes(initialProfession || '') && initialProfession);
+    setShowOtherInput(Boolean(!PROFESSION_OPTIONS.includes(initialProfession || '') && initialProfession));
     setIsEditing(false);
     setMessage(null);
   };

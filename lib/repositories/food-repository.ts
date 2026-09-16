@@ -16,7 +16,12 @@ export interface FoodItem {
     name: string;
     email: string;
     profile_pic?: string;
-  };
+  } | Array<{
+    id: number;
+    name: string;
+    email: string;
+    profile_pic?: string;
+  }>;
   food_details?: Array<{
     id: number;
     ingredient_name: string;

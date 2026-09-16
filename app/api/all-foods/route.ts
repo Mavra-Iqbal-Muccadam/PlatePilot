@@ -55,7 +55,10 @@ class AllFoodsFilterStrategy implements FoodFilterStrategy {
 
 class RestaurantFilterStrategy implements FoodFilterStrategy {
   filter(foods: any[], restaurantId: number): any[] {
-    return foods.filter(food => food.restaurant_user?.id === restaurantId);
+    return foods.filter(food => {
+      const ru = Array.isArray(food.restaurant_user) ? food.restaurant_user[0] : food.restaurant_user;
+      return ru?.id === restaurantId;
+    });
   }
 }
 
@@ -96,26 +99,31 @@ class FoodService {
       const filteredFoods = this.filterStrategy.filter(foods, filterCriteria);
       
       // Transform data for consistent API response
-      return filteredFoods.map(food => ({
-        id: food.id,
-        name: food.name,
-        description: food.description || '',
-        price: parseFloat(food.price.toString()),
-        image_url: food.image_url,
-        allergies: food.allergies || '',
-        created_at: food.created_at,
-        restaurant: {
-          id: food.restaurant_user?.id || 0,
-          name: food.restaurant_user?.name || 'Unknown Restaurant',
-          profile_pic: food.restaurant_user?.profile_pic
-        },
-        ingredients: food.food_details?.map((detail: any) => ({
-          name: detail.ingredient_name,
-          calories: detail.calories_count || 0
-        })) || [],
-        total_calories: food.food_details?.reduce((sum: number, detail: any) => 
-          sum + (detail.calories_count || 0), 0) || 0
-      }));
+      return filteredFoods.map(food => {
+        const ru = Array.isArray(food.restaurant_user)
+          ? food.restaurant_user[0] as { id: any; name: any; profile_pic: any } | undefined
+          : food.restaurant_user as { id: any; name: any; profile_pic: any } | null;
+        return {
+          id: food.id,
+          name: food.name,
+          description: food.description || '',
+          price: parseFloat(food.price.toString()),
+          image_url: food.image_url,
+          allergies: food.allergies || '',
+          created_at: food.created_at,
+          restaurant: {
+            id: ru?.id || 0,
+            name: ru?.name || 'Unknown Restaurant',
+            profile_pic: ru?.profile_pic
+          },
+          ingredients: food.food_details?.map((detail: any) => ({
+            name: detail.ingredient_name,
+            calories: detail.calories_count || 0
+          })) || [],
+          total_calories: food.food_details?.reduce((sum: number, detail: any) => 
+            sum + (detail.calories_count || 0), 0) || 0
+        };
+      });
     } catch (error) {
       console.error('Error in FoodService.getAllFoods:', error);
       throw error;

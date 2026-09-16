@@ -216,7 +216,7 @@ export class UpdateOrderStatusCommand implements OrderCommand {
         .from('orders')
         .update({ status: this.newStatus, updated_at: new Date().toISOString() })
         .eq('id', this.orderId)
-        .select('id', { count: 'exact', head: true });
+        .select('id');
 
       if (error) {
         console.error('Error updating order status:', error);

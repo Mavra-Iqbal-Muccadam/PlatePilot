@@ -58,17 +58,23 @@ export async function POST(request: NextRequest) {
     }
 
     // Transform data for search
-    const transformedFoodItems = foodItems.map(item => ({
-      id: item.id,
-      name: item.name,
-      description: item.description || '',
-      price: parseFloat(item.price.toString()),
-      image_url: item.image_url,
-      restaurant_id: item.restaurant_id,
-      restaurant_name: item.restaurant_user?.name || 'Unknown Restaurant',
-      restaurant_profile: item.restaurant_user?.profile_pic,
-      ingredients: item.food_details || []
-    }));
+    const transformedFoodItems = foodItems.map(item => {
+      const restaurantUser = Array.isArray(item.restaurant_user)
+        ? item.restaurant_user[0]
+        : item.restaurant_user as { name: any; profile_pic: any } | null;
+
+      return {
+        id: item.id,
+        name: item.name,
+        description: item.description || '',
+        price: parseFloat(item.price.toString()),
+        image_url: item.image_url,
+        restaurant_id: item.restaurant_id,
+        restaurant_name: restaurantUser?.name || 'Unknown Restaurant',
+        restaurant_profile: restaurantUser?.profile_pic,
+        ingredients: item.food_details || []
+      };
+    });
 
     console.log(`Searching for: "${query}" among ${transformedFoodItems.length} food items`);
 

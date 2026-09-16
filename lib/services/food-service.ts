@@ -1,6 +1,12 @@
 // Service Layer with Strategy Pattern for Food Operations
 import { FoodRepository, FoodItem } from '../repositories/food-repository';
 
+// Helper to normalize restaurant_user which Supabase may return as array or object
+function getRestaurantUser(food: FoodItem) {
+  if (!food.restaurant_user) return null;
+  return Array.isArray(food.restaurant_user) ? food.restaurant_user[0] : food.restaurant_user;
+}
+
 // Strategy Pattern for different food display strategies
 export interface FoodDisplayStrategy {
   formatFoodData(foods: FoodItem[]): any[];
@@ -9,51 +15,60 @@ export interface FoodDisplayStrategy {
 // Concrete Strategy for Grid Display
 export class GridDisplayStrategy implements FoodDisplayStrategy {
   formatFoodData(foods: FoodItem[]): any[] {
-    return foods.map(food => ({
-      id: food.id,
-      name: food.name,
-      description: food.description,
-      price: parseFloat(food.price.toString()),
-      image_url: food.image_url,
-      allergies: food.allergies,
-      restaurant_name: food.restaurant_user?.name || 'Unknown Restaurant',
-      restaurant_id: food.restaurant_id,
-      restaurant_profile: food.restaurant_user?.profile_pic,
-      ingredients: food.food_details || [],
-      created_at: food.created_at
-    }));
+    return foods.map(food => {
+      const ru = getRestaurantUser(food);
+      return {
+        id: food.id,
+        name: food.name,
+        description: food.description,
+        price: parseFloat(food.price.toString()),
+        image_url: food.image_url,
+        allergies: food.allergies,
+        restaurant_name: ru?.name || 'Unknown Restaurant',
+        restaurant_id: food.restaurant_id,
+        restaurant_profile: ru?.profile_pic,
+        ingredients: food.food_details || [],
+        created_at: food.created_at
+      };
+    });
   }
 }
 
 // Concrete Strategy for List Display
 export class ListDisplayStrategy implements FoodDisplayStrategy {
   formatFoodData(foods: FoodItem[]): any[] {
-    return foods.map(food => ({
-      id: food.id,
-      name: food.name,
-      price: parseFloat(food.price.toString()),
-      restaurant_name: food.restaurant_user?.name || 'Unknown Restaurant',
-      restaurant_id: food.restaurant_id,
-      image_url: food.image_url,
-      ingredient_count: food.food_details?.length || 0,
-      created_at: food.created_at
-    }));
+    return foods.map(food => {
+      const ru = getRestaurantUser(food);
+      return {
+        id: food.id,
+        name: food.name,
+        price: parseFloat(food.price.toString()),
+        restaurant_name: ru?.name || 'Unknown Restaurant',
+        restaurant_id: food.restaurant_id,
+        image_url: food.image_url,
+        ingredient_count: food.food_details?.length || 0,
+        created_at: food.created_at
+      };
+    });
   }
 }
 
 // Concrete Strategy for Search Results Display
 export class SearchResultsDisplayStrategy implements FoodDisplayStrategy {
   formatFoodData(foods: FoodItem[]): any[] {
-    return foods.map(food => ({
-      id: food.id,
-      name: food.name,
-      description: food.description,
-      price: parseFloat(food.price.toString()),
-      image_url: food.image_url,
-      restaurant_name: food.restaurant_user?.name || 'Unknown Restaurant',
-      restaurant_id: food.restaurant_id,
-      relevanceScore: 0 // Will be set by search algorithm
-    }));
+    return foods.map(food => {
+      const ru = getRestaurantUser(food);
+      return {
+        id: food.id,
+        name: food.name,
+        description: food.description,
+        price: parseFloat(food.price.toString()),
+        image_url: food.image_url,
+        restaurant_name: ru?.name || 'Unknown Restaurant',
+        restaurant_id: food.restaurant_id,
+        relevanceScore: 0 // Will be set by search algorithm
+      };
+    });
   }
 }
 

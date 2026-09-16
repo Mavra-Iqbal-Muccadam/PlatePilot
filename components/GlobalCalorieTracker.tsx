@@ -62,7 +62,7 @@ export default function GlobalCalorieTracker() {
         // Optional: Show browser notification if permission granted
         if ('Notification' in window && Notification.permission === 'granted') {
           new Notification('Calorie Limit Exceeded!', {
-            body: `You've consumed ${data.currentCalories} calories today. Your limit is ${data.dailyLimit} calories.`,
+            body: `You've consumed ${data.current_calories} calories today. Your limit is ${data.daily_limit} calories.`,
             icon: '/favicon.ico',
             tag: 'calorie-limit'
           });

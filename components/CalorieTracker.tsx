@@ -531,8 +531,30 @@ export function useCalorieTracker(userId: number) {
     }
   };
 
+  const addManualCalories = async (calories: number, foodName: string) => {
+    try {
+      const response = await fetch("/api/calorie-tracker", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userId,
+          item: { name: foodName, total_calories: calories },
+          sourceType: "manual",
+          sourceId: null,
+        }),
+      });
+
+      const result = await response.json();
+      return result;
+    } catch (error) {
+      console.error("Error adding manual calories:", error);
+      return { success: false, error: "Failed to add calories" };
+    }
+  };
+
   return {
     addCaloriesFromFood,
     addCaloriesFromDeal,
+    addManualCalories,
   };
 }

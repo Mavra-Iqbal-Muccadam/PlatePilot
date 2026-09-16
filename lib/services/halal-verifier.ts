@@ -23,6 +23,7 @@ interface HalalVerificationResult {
  */
 interface HalalRepository {
   getDealIngredients(dealId: number): Promise<string[]>;
+  getFoodIngredients(foodId: number): Promise<string[]>;
   cacheHalalResult(dealId: number, result: HalalVerificationResult): Promise<void>;
   getCachedResult(dealId: number): Promise<HalalVerificationResult | null>;
 }

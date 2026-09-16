@@ -80,7 +80,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (itemCheck.deals.restaurant_id !== restaurantId) {
+    const dealsData = Array.isArray(itemCheck.deals) ? itemCheck.deals[0] : itemCheck.deals as { restaurant_id: any } | null;
+
+    if (dealsData?.restaurant_id !== restaurantId) {
       return NextResponse.json(
         { success: false, error: 'Access denied - deal belongs to different restaurant' },
         { status: 403 }

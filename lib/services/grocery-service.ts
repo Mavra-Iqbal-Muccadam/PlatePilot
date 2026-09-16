@@ -204,7 +204,7 @@ export class SupabaseGroceryRepository implements GroceryRepository {
 
 // Strategy Pattern for ingredient extraction
 export interface IngredientExtractionStrategy {
-  extractIngredients(foodItem: any): GroceryItem[];
+  extractIngredients(foodItem: any): GroceryItem[] | Promise<GroceryItem[]>;
 }
 
 export class FoodDetailsExtractionStrategy implements IngredientExtractionStrategy {
@@ -268,12 +268,6 @@ export class AIIngredientExtractionStrategy implements IngredientExtractionStrat
     }
 
     // Fallback to basic extraction
-    return new FoodDetailsExtractionStrategy().extractIngredients(foodItem);
-  }
-
-  // Synchronous version for interface compatibility
-  extractIngredients(foodItem: any): GroceryItem[] {
-    // This will be overridden by the async version
     return new FoodDetailsExtractionStrategy().extractIngredients(foodItem);
   }
 }
@@ -350,7 +344,7 @@ export class GroceryService {
     if (this.extractionStrategy instanceof AIIngredientExtractionStrategy) {
       ingredients = await (this.extractionStrategy as AIIngredientExtractionStrategy).extractIngredients(foodItem);
     } else {
-      ingredients = this.extractionStrategy.extractIngredients(foodItem);
+      ingredients = this.extractionStrategy.extractIngredients(foodItem) as GroceryItem[];
     }
 
     if (ingredients.length === 0) {

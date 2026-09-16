@@ -26,6 +26,8 @@ export default function HalalBadge({ dealId, foodId, onStatusChange }: HalalBadg
 
   // Subscribe to halal status changes
   useEffect(() => {
+    if (itemId === undefined) return;
+
     console.log(`[HalalBadge] useEffect running for ${itemType}Id: ${itemId}`);
     
     const observer = {
