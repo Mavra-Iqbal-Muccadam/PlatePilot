@@ -85,9 +85,9 @@ export default function CameraTest() {
       </div>
 
       <div className="mt-4 text-sm text-gray-600">
-        <p><strong>Browser:</strong> {navigator.userAgent.split(' ')[0]}</p>
-        <p><strong>HTTPS:</strong> {location.protocol === 'https:' ? 'Yes' : 'No'}</p>
-        <p><strong>MediaDevices:</strong> {navigator.mediaDevices ? 'Supported' : 'Not supported'}</p>
+        <p><strong>Browser:</strong> {typeof navigator !== 'undefined' ? navigator.userAgent.split(' ')[0] : 'N/A'}</p>
+        <p><strong>HTTPS:</strong> {typeof location !== 'undefined' ? (location.protocol === 'https:' ? 'Yes' : 'No') : 'N/A'}</p>
+        <p><strong>MediaDevices:</strong> {typeof navigator !== 'undefined' ? (navigator.mediaDevices ? 'Supported' : 'Not supported') : 'N/A'}</p>
       </div>
     </div>
   );

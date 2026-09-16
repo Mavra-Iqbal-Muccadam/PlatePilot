@@ -1,5 +1,6 @@
 'use client';
 
+import { Suspense } from 'react';
 import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -44,6 +45,14 @@ const dealImages = [
 ];
 
 export default function ViewRestaurantDeals() {
+  return (
+    <Suspense fallback={null}>
+      <ViewRestaurantDealsInner />
+    </Suspense>
+  );
+}
+
+function ViewRestaurantDealsInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const restaurantId = searchParams.get('id');
