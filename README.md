@@ -181,28 +181,5 @@ food-app/
 
 ---
 
-## 🌍 Live Demo
+🔗 **Live Demo:** [platepilot-mavraiqbal.vercel.app](https://platepilot-mavraiqbal.vercel.app/)
 
-> Coming soon — deployment to Vercel in progress.
-
----
-
-## 👤 About This Project
-
-Built as a full-stack portfolio project demonstrating production-level architecture, AI integration, and software engineering best practices — targeting the role of **Full-Stack Engineer**.
-
-| | |
-|---|---|
-| **Frontend** | Next.js · React · TypeScript · Tailwind CSS · Framer Motion |
-| **Backend** | Next.js API Routes · Node.js · JWT Auth |
-| **Database** | Supabase · PostgreSQL |
-| **AI** | Qwen 2.5 72B via OpenRouter |
-| **Patterns** | Factory · Strategy · Repository · Observer · Command · Composite · Decorator · Unit of Work · Singleton |
-
----
-
-<div align="center">
-
-⭐ If you found this project interesting, please consider giving it a star!
-
-</div>
